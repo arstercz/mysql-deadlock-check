@@ -33,9 +33,8 @@ pt_exec() {
     log "already run deadlock for MySQL $Host:$Port"
   else 
     log "check $Host:$Port ..."
-    echo -e "m!AReP&b79yfB7cZc%" | \
       $PT_TOOL --config $DIR/etc/pt.conf \
-          h=$Host,P=$Port,A=utf8,u=monitor --ask-pass \
+          h=$Host,P=$Port,A=utf8 \
           --log $DIR/log/deadlock_$Host-$Port\.log --daemonize 2>/dev/null
   fi
 }
