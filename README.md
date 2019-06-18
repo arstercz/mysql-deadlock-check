@@ -1,6 +1,6 @@
 ## mysql-deadlock-check
 
-collect MySQL deadlocks. read more from [pt-deadlock-logger](https://www.percona.com/doc/percona-toolkit/3.0/pt-deadlock-logger.html).
+collect MySQL deadlocks. read more from [pt-deadlock-logger](https://www.percona.com/doc/percona-toolkit/3.0/pt-deadlock-logger.html) and [blog](https://arstercz.com/%e6%9c%89%e6%95%88%e6%94%b6%e9%9b%86-mysql-%e7%9a%84%e6%ad%bb%e9%94%81%e4%bf%a1%e6%81%af/).
 
 ## How to use?
 
@@ -39,6 +39,8 @@ you can add MySQL instance list into `etc/host.list`, such as:
 the parameters of the `pt-deadlock-logger` can be add in `etc/pt.conf`, mainly include:
 ```
 tag=Beijing
+user=user_check
+password=xxxxxxxxxx
 interval=60
 iterations=1
 set-vars=wait_timeout=10000
