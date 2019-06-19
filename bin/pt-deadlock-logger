@@ -951,8 +951,8 @@ sub prompt_noecho {
       Term::ReadKey::ReadMode('noecho');
       chomp($response = <STDIN>);
       Term::ReadKey::ReadMode('normal');
-      #print "\n"
-      #   or die "Cannot print: $OS_ERROR";
+      print "\n"
+         or die "Cannot print: $OS_ERROR";
    };
    if ( $EVAL_ERROR ) {
       die "Cannot read response; is Term::ReadKey installed? $EVAL_ERROR";
