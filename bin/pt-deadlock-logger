@@ -4689,7 +4689,7 @@ sub main {
                      sort { $a->{thread} <=> $b->{thread} } values %txns
                   ) {
                      $txn->{finger} = $fingerprint || '';
-                     $txn->{tag} = $o->got('tag') || '';
+                     $txn->{tag} = $o->get('tag') || '';
                      $ins_sth->execute(@{$txn}{@cols});
                   }
                   $dst->dbh->commit();
@@ -4843,8 +4843,8 @@ sub parse_deadlocks {
          $query_text =~ s/\s+$//;
          $query_text =~ s/\s+/ /g;
 
-         @{$hash}{qw(thread hostname ip user query tag finger origmsg)}
-            = ($mysql_thread_id, $hostname, $ip, $user, $query_text, '', $dl_text);
+         @{$hash}{qw(thread hostname ip user query origmsg)}
+            = ($mysql_thread_id, $hostname, $ip, $user, $query_text, $dl_text);
          foreach my $key ( keys %$hash ) {
             if ( !defined $hash->{$key} ) {
                $hash->{$key} = '';
@@ -4871,7 +4871,7 @@ sub parse_deadlocks {
       map { $hash->{$_} = 0 unless defined $hash->{$_} }
          qw(thread txn_id txn_time);
       map { $hash->{$_} = '' unless defined $hash->{$_} }
-         qw(user hostname db tbl idx lock_type lock_mode query tag finger origmsg);
+         qw(user hostname db tbl idx lock_type lock_mode query origmsg);
    }
 
    # Extract some miscellaneous data from the deadlock.
@@ -5302,6 +5302,7 @@ MAGIC_dest_table
    wait_hold char(1) NOT NULL,
    victim tinyint unsigned NOT NULL,
    query text NOT NULL,
+   tag varchar(50) NOT NULL DEFAULT '',
    finger varchar(100) NOT NULL DEFAULT '',
    origmsg text NOT NULL,
    PRIMARY KEY  (server,ts,thread),
