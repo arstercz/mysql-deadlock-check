@@ -68,30 +68,32 @@ create database deadlock_check;
 use deadlock_check;
 grant select,insert,update,delete on deadlock_check.* to user_deadlock@`10.xxx.xxx.xxx.%`;
 
-CREATE TABLE deadlocks (
-  server char(20) NOT NULL,
-  ts timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  thread int unsigned NOT NULL,
-  txn_id bigint unsigned NOT NULL,
-  txn_time smallint unsigned NOT NULL,
-  user char(16) NOT NULL,
-  hostname char(20) NOT NULL,
-  ip char(15) NOT NULL, -- alternatively, ip int unsigned NOT NULL
-  db char(64) NOT NULL,
-  tbl char(64) NOT NULL,
-  idx char(64) NOT NULL,
-  lock_type char(16) NOT NULL,
-  lock_mode char(1) NOT NULL,
-  wait_hold char(1) NOT NULL,
-  victim tinyint unsigned NOT NULL,
-  query text NOT NULL,
-  tag varchar(50) NOT NULL DEFAULT '',
-  finger varchar(100) NOT NULL DEFAULT '',
-  origmsg text NOT NULL,
-  PRIMARY KEY  (server,ts,thread),
+CREATE TABLE `deadlocks` (
+  `server` varchar(30) NOT NULL,
+  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tm` int(11) NOT NULL DEFAULT '0',
+  `thread` int(10) unsigned NOT NULL,
+  `txn_id` bigint(20) unsigned NOT NULL,
+  `txn_time` smallint(5) unsigned NOT NULL,
+  `user` char(16) NOT NULL,
+  `hostname` char(20) NOT NULL,
+  `ip` char(15) NOT NULL,
+  `db` char(64) NOT NULL,
+  `tbl` char(64) NOT NULL,
+  `idx` char(64) NOT NULL,
+  `lock_type` char(16) NOT NULL,
+  `lock_mode` varchar(20) NOT NULL,
+  `wait_hold` varchar(3) NOT NULL,
+  `victim` tinyint(3) unsigned NOT NULL,
+  `query` text NOT NULL,
+  `tag` varchar(50) NOT NULL DEFAULT '',
+  `finger` varchar(100) NOT NULL DEFAULT '',
+  `origmsg` text NOT NULL,
+  PRIMARY KEY (`server`,`ts`,`thread`),
   KEY `idx_ts` (`ts`),
-  KEY `idx_finger` (`finger`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `idx_finger` (`finger`),
+  KEY `idx_tm` (`tm`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ```
 
 #### MySQL instance
