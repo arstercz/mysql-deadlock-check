@@ -4420,6 +4420,7 @@ use Socket qw(inet_aton);
 use Time::HiRes qw(sleep);
 use File::Temp qw(tempfile);
 use File::Spec;
+use Date::Parse;
 
 use sigtrap 'handler', \&sig_int, 'normal-signals';
 
@@ -4893,6 +4894,7 @@ sub parse_deadlocks {
    foreach my $txn ( values %txns ) {
       $txn->{victim} = $txn->{id} == $victim ? 1 : 0;
       $txn->{ts}     = $ts;
+      $txn->{tm}     = str2time("$ts"); # convert to unix time value
       $txn->{server} = $args->{server} || '';
       $txn->{ip}     = inet_aton($txn->{ip}) if $args->{'numeric-ip'};
    }
@@ -5154,7 +5156,7 @@ table again.
 
 =item --columns
 
-type: Array; default: server, ts, thread, txn_id, txn_time, user, hostname, ip, db, tbl, idx, lock_type, lock_mode, wait_hold, victim, query, tag, finger, origmsg
+type: Array; default: server, ts, tm, thread, txn_id, txn_time, user, hostname, ip, db, tbl, idx, lock_type, lock_mode, wait_hold, victim, query, tag, finger, origmsg
 
 The columns are:
 
@@ -5288,6 +5290,7 @@ MAGIC_dest_table
  CREATE TABLE deadlocks (
    server char(20) NOT NULL,
    ts timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   tm int(11) NOT NULL DEFAULT '0',
    thread int unsigned NOT NULL,
    txn_id bigint unsigned NOT NULL,
    txn_time smallint unsigned NOT NULL,
@@ -5306,7 +5309,9 @@ MAGIC_dest_table
    finger varchar(100) NOT NULL DEFAULT '',
    origmsg text NOT NULL,
    PRIMARY KEY  (server,ts,thread),
-   KEY `idx_ts` (`ts`)
+   KEY `idx_ts` (`ts`),
+   KEY `idx_finger` (`finger`),
+   KEY `idx_tm` (`tm`)
  ) ENGINE=InnoDB
 
 If you use L<"--columns">, you can omit whichever columns you don't want to
