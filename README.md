@@ -55,7 +55,7 @@ tag:  identify the MySQL instance, this can be location, rack or project name;
 user: the username of the MySQL instance, all MySQL instances in host.list must have the same user and password;
 password: the password of the MySQL instance;
 interval: collect once every interval time if you don't give the interations value;
-interations: the check times to execute, 1 means just check one time before exit. this option can be avoid start too many process to collect deadlocks;
+interations: the check times to execute, 1 means just check one interval time before exit;
 set-vars: change session parameter when connect to MySQL instance;
 dest:  the analysis database connection info, all deadlocks will send to this dest's database;
 ```
